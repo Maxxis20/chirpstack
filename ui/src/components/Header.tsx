@@ -138,7 +138,13 @@ function Header({ user }: { user: User }) {
 
   return (
     <div>
-      <img className="logo" alt="ChirpStack" src="/logo.png" />
+      <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <img alt="MaxLoraNet" src="/icon.png" style={{ height: '40px' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
+          <span style={{ fontWeight: 'bold', fontSize: '18px' }}>MaxLoraNet</span>
+          <span style={{ fontSize: '11px', color: '#888' }}>powered by ChirpStack</span>
+        </div>
+      </div>
       <div className="actions">
         <div className="search">
           <AutoComplete
