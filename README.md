@@ -9,6 +9,29 @@ cloud providers, databases and services commonly used for handling device data.
 ChirpStack provides a gRPC based API that can be used to integrate or extend
 ChirpStack.
 
+## Integrations
+
+ChirpStack supports a wide range of integrations for forwarding device data:
+
+### Cloud & Database Integrations
+* **HTTP** - Forward data to custom HTTP endpoints
+* **MQTT** - Global MQTT integration with TLS certificate support
+* **AWS SNS** - Amazon Simple Notification Service
+* **Azure Service Bus** - Microsoft Azure messaging
+* **GCP Pub/Sub** - Google Cloud Platform messaging
+* **InfluxDB** - Time-series database integration
+* **ThingsBoard** - IoT platform integration
+
+### Industrial Protocol Integrations
+* **Modbus TCP** - Industrial automation protocol for SCADA/PLC systems
+* **BACnet** - Building automation and control networking protocol
+
+### Third-Party Service Integrations
+* **IFTTT** - If This Then That automation
+* **Blynk** - IoT platform for mobile apps
+* **myDevices** - Cayenne IoT platform
+* **Pilot Things** - IoT analytics platform
+
 ## Documentation and binaries
 
 Please refer to the [ChirpStack](https://www.chirpstack.io/) website for
