@@ -39,6 +39,12 @@ import EditDeviceProfileTemplate from "./views/device-profile-templates/EditDevi
 import ListRegions from "./views/regions/ListRegions";
 import RegionDetails from "./views/regions/RegionDetails";
 
+// modbus
+import ModbusConfig from "./views/modbus/ModbusConfig";
+
+// bacnet
+import BacnetConfig from "./views/bacnet/BacnetConfig";
+
 // stores
 import SessionStore from "./stores/SessionStore";
 
@@ -107,6 +113,8 @@ function App() {
 
                   <Route path="/regions" element={<ListRegions />} />
                   <Route path="/regions/:id" element={<RegionDetails />} />
+                  <Route path="/modbus" element={<ModbusConfig />} />
+                  <Route path="/bacnet" element={<BacnetConfig />} />
                 </Routes>
               </Layout.Content>
             </Layout>

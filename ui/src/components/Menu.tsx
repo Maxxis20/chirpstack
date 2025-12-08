@@ -14,6 +14,8 @@ import {
   AppstoreOutlined,
   CompassOutlined,
   RadarChartOutlined,
+  ApiOutlined,
+  DatabaseOutlined,
 } from "@ant-design/icons";
 
 import type { GetTenantResponse, ListTenantsResponse } from "@chirpstack/chirpstack-api-grpc-web/api/tenant_pb";
@@ -103,6 +105,16 @@ function SideMenu() {
 
     if (/\/regions.*/g.exec(path)) {
       setSelectedKey("ns-regions");
+    }
+
+    // ns modbus
+    if (/\/modbus.*/g.exec(path)) {
+      setSelectedKey("ns-modbus");
+    }
+
+    // ns bacnet
+    if (/\/bacnet.*/g.exec(path)) {
+      setSelectedKey("ns-bacnet");
     }
 
     // tenant dashboard
@@ -198,6 +210,16 @@ function SideMenu() {
           key: "ns-regions",
           icon: <CompassOutlined />,
           label: <Link to="/regions">Regions</Link>,
+        },
+        {
+          key: "ns-modbus",
+          icon: <ApiOutlined />,
+          label: <Link to="/modbus">Modbus TCP</Link>,
+        },
+        {
+          key: "ns-bacnet",
+          icon: <DatabaseOutlined />,
+          label: <Link to="/bacnet">BACnet</Link>,
         },
       ],
     });
