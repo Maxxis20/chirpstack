@@ -62,6 +62,16 @@ import type {
   GetBlynkIntegrationResponse,
   UpdateBlynkIntegrationRequest,
   DeleteBlynkIntegrationRequest,
+  CreateModbusIntegrationRequest,
+  GetModbusIntegrationRequest,
+  GetModbusIntegrationResponse,
+  UpdateModbusIntegrationRequest,
+  DeleteModbusIntegrationRequest,
+  CreateBacnetIntegrationRequest,
+  GetBacnetIntegrationRequest,
+  GetBacnetIntegrationResponse,
+  UpdateBacnetIntegrationRequest,
+  DeleteBacnetIntegrationRequest,
   GenerateMqttIntegrationClientCertificateRequest,
   GenerateMqttIntegrationClientCertificateResponse,
   ListApplicationDeviceProfilesRequest,
@@ -784,6 +794,132 @@ class ApplicationStore extends EventEmitter {
 
       notification.success({
         message: "Blynk integration deleted",
+        duration: 3,
+      });
+
+      this.emit("integration.delete");
+      callbackFunc();
+    });
+  };
+
+  createModbusIntegration = (req: CreateModbusIntegrationRequest, callbackFunc: () => void) => {
+    this.client.createModbusIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Modbus TCP integration created",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  getModbusIntegration = (
+    req: GetModbusIntegrationRequest,
+    callbackFunc: (resp: GetModbusIntegrationResponse) => void,
+  ) => {
+    this.client.getModbusIntegration(req, SessionStore.getMetadata(), (err, resp) => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      callbackFunc(resp);
+    });
+  };
+
+  updateModbusIntegration = (req: UpdateModbusIntegrationRequest, callbackFunc: () => void) => {
+    this.client.updateModbusIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Modbus TCP integration updated",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  deleteModbusIntegration = (req: DeleteModbusIntegrationRequest, callbackFunc: () => void) => {
+    this.client.deleteModbusIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "Modbus TCP integration deleted",
+        duration: 3,
+      });
+
+      this.emit("integration.delete");
+      callbackFunc();
+    });
+  };
+
+  createBacnetIntegration = (req: CreateBacnetIntegrationRequest, callbackFunc: () => void) => {
+    this.client.createBacnetIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "BACnet integration created",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  getBacnetIntegration = (
+    req: GetBacnetIntegrationRequest,
+    callbackFunc: (resp: GetBacnetIntegrationResponse) => void,
+  ) => {
+    this.client.getBacnetIntegration(req, SessionStore.getMetadata(), (err, resp) => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      callbackFunc(resp);
+    });
+  };
+
+  updateBacnetIntegration = (req: UpdateBacnetIntegrationRequest, callbackFunc: () => void) => {
+    this.client.updateBacnetIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "BACnet integration updated",
+        duration: 3,
+      });
+
+      callbackFunc();
+    });
+  };
+
+  deleteBacnetIntegration = (req: DeleteBacnetIntegrationRequest, callbackFunc: () => void) => {
+    this.client.deleteBacnetIntegration(req, SessionStore.getMetadata(), err => {
+      if (err !== null) {
+        HandleError(err);
+        return;
+      }
+
+      notification.success({
+        message: "BACnet integration deleted",
         duration: 3,
       });
 

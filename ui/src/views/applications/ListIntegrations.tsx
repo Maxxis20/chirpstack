@@ -21,6 +21,8 @@ import PilotThingsCard from "./integrations/PilotThingsCard";
 import ThingsBoardCard from "./integrations/ThingsBoardCard";
 import IftttCard from "./integrations/IftttCard";
 import BlynkCard from "./integrations/BlynkCard";
+import ModbusCard from "./integrations/ModbusCard";
+import BacnetCard from "./integrations/BacnetCard";
 
 interface IProps {
   application: Application;
@@ -122,6 +124,20 @@ function ListIntegrations(props: IProps) {
           configured.push(<ThingsBoardCard application={props.application} />);
         } else {
           available.push(<ThingsBoardCard application={props.application} add />);
+        }
+
+        // Modbus TCP
+        if (includes(resp.getResultList(), IntegrationKind.MODBUS)) {
+          configured.push(<ModbusCard application={props.application} />);
+        } else {
+          available.push(<ModbusCard application={props.application} add />);
+        }
+
+        // BACnet
+        if (includes(resp.getResultList(), IntegrationKind.BACNET)) {
+          configured.push(<BacnetCard application={props.application} />);
+        } else {
+          available.push(<BacnetCard application={props.application} add />);
         }
 
         setConfigured(configured);

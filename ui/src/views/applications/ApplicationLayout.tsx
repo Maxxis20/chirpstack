@@ -39,6 +39,10 @@ import CreateIftttIntegration from "./integrations/CreateIftttIntegration";
 import EditIftttIntegration from "./integrations/EditIftttIntegration";
 import CreateBlynkIntegration from "./integrations/CreateBlynkIntegration";
 import EditBlynkIntegration from "./integrations/EditBlynkIntegration";
+import CreateModbusIntegration from "./integrations/CreateModbusIntegration";
+import EditModbusIntegration from "./integrations/EditModbusIntegration";
+import CreateBacnetIntegration from "./integrations/CreateBacnetIntegration";
+import EditBacnetIntegration from "./integrations/EditBacnetIntegration";
 import { useTitle } from "../helpers";
 
 interface IProps {
@@ -197,6 +201,10 @@ function ApplicationLayout(props: IProps) {
           />
           <Route path="/integrations/blynk/create" element={<CreateBlynkIntegration application={app} />} />
           <Route path="/integrations/blynk/edit" element={<EditBlynkIntegration application={app} />} />
+          <Route path="/integrations/modbus/create" element={<CreateModbusIntegration application={app} />} />
+          <Route path="/integrations/modbus/edit" element={<EditModbusIntegration application={app} />} />
+          <Route path="/integrations/bacnet/create" element={<CreateBacnetIntegration application={app} />} />
+          <Route path="/integrations/bacnet/edit" element={<EditBacnetIntegration application={app} />} />
         </Routes>
       </Card>
     </Space>

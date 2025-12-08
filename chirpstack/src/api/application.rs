@@ -240,6 +240,8 @@ impl ApplicationService for Application {
                     application::IntegrationKind::PilotThings => api::IntegrationKind::PilotThings,
                     application::IntegrationKind::Ifttt => api::IntegrationKind::Ifttt,
                     application::IntegrationKind::Blynk => api::IntegrationKind::Blynk,
+                    application::IntegrationKind::Modbus => api::IntegrationKind::Modbus,
+                    application::IntegrationKind::Bacnet => api::IntegrationKind::Bacnet,
                 }
                 .into(),
             })
@@ -1775,6 +1777,324 @@ impl ApplicationService for Application {
             .await?;
 
         application::delete_integration(&app_id, application::IntegrationKind::Blynk)
+            .await
+            .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut()
+            .insert("x-log-application_id", req.application_id.parse().unwrap());
+
+        Ok(resp)
+    }
+
+    async fn create_modbus_integration(
+        &self,
+        request: Request<api::CreateModbusIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::create_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::Modbus,
+            configuration: application::IntegrationConfiguration::Modbus(
+                application::ModbusConfiguration {
+                    server_address: req_int.server_address.clone(),
+                    server_port: req_int.server_port,
+                    unit_id: req_int.unit_id,
+                    vendor_name: req_int.vendor_name.clone(),
+                    product_code: req_int.product_code.clone(),
+                    model_name: req_int.model_name.clone(),
+                    version: req_int.version.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+        .await
+        .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
+    }
+
+    async fn get_modbus_integration(
+        &self,
+        request: Request<api::GetModbusIntegrationRequest>,
+    ) -> Result<Response<api::GetModbusIntegrationResponse>, Status> {
+        let req = request.get_ref();
+        let app_id = Uuid::from_str(&req.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Read, app_id),
+            )
+            .await?;
+
+        let i = application::get_integration(&app_id, application::IntegrationKind::Modbus)
+            .await
+            .map_err(|e| e.status())?;
+
+        if let application::IntegrationConfiguration::Modbus(conf) = &i.configuration {
+            let mut resp = Response::new(api::GetModbusIntegrationResponse {
+                integration: Some(api::ModbusIntegration {
+                    application_id: app_id.to_string(),
+                    server_address: conf.server_address.clone(),
+                    server_port: conf.server_port,
+                    unit_id: conf.unit_id,
+                    vendor_name: conf.vendor_name.clone(),
+                    product_code: conf.product_code.clone(),
+                    model_name: conf.model_name.clone(),
+                    version: conf.version.clone(),
+                }),
+            });
+            resp.metadata_mut()
+                .insert("x-log-application_id", req.application_id.parse().unwrap());
+
+            Ok(resp)
+        } else {
+            Err(Status::internal("Integration has no Modbus configuration"))
+        }
+    }
+
+    async fn update_modbus_integration(
+        &self,
+        request: Request<api::UpdateModbusIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::update_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::Modbus,
+            configuration: application::IntegrationConfiguration::Modbus(
+                application::ModbusConfiguration {
+                    server_address: req_int.server_address.clone(),
+                    server_port: req_int.server_port,
+                    unit_id: req_int.unit_id,
+                    vendor_name: req_int.vendor_name.clone(),
+                    product_code: req_int.product_code.clone(),
+                    model_name: req_int.model_name.clone(),
+                    version: req_int.version.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+        .await
+        .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
+    }
+
+    async fn delete_modbus_integration(
+        &self,
+        request: Request<api::DeleteModbusIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req = request.get_ref();
+        let app_id = Uuid::from_str(&req.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        application::delete_integration(&app_id, application::IntegrationKind::Modbus)
+            .await
+            .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut()
+            .insert("x-log-application_id", req.application_id.parse().unwrap());
+
+        Ok(resp)
+    }
+
+    async fn create_bacnet_integration(
+        &self,
+        request: Request<api::CreateBacnetIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::create_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::Bacnet,
+            configuration: application::IntegrationConfiguration::Bacnet(
+                application::BacnetConfiguration {
+                    device_id: req_int.device_id,
+                    device_name: req_int.device_name.clone(),
+                    device_address: req_int.device_address.clone(),
+                    device_port: req_int.device_port,
+                    object_name: req_int.object_name.clone(),
+                    vendor_name: req_int.vendor_name.clone(),
+                    model_name: req_int.model_name.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+        .await
+        .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
+    }
+
+    async fn get_bacnet_integration(
+        &self,
+        request: Request<api::GetBacnetIntegrationRequest>,
+    ) -> Result<Response<api::GetBacnetIntegrationResponse>, Status> {
+        let req = request.get_ref();
+        let app_id = Uuid::from_str(&req.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Read, app_id),
+            )
+            .await?;
+
+        let i = application::get_integration(&app_id, application::IntegrationKind::Bacnet)
+            .await
+            .map_err(|e| e.status())?;
+
+        if let application::IntegrationConfiguration::Bacnet(conf) = &i.configuration {
+            let mut resp = Response::new(api::GetBacnetIntegrationResponse {
+                integration: Some(api::BacnetIntegration {
+                    application_id: app_id.to_string(),
+                    device_id: conf.device_id,
+                    device_name: conf.device_name.clone(),
+                    device_address: conf.device_address.clone(),
+                    device_port: conf.device_port,
+                    object_name: conf.object_name.clone(),
+                    vendor_name: conf.vendor_name.clone(),
+                    model_name: conf.model_name.clone(),
+                }),
+            });
+            resp.metadata_mut()
+                .insert("x-log-application_id", req.application_id.parse().unwrap());
+
+            Ok(resp)
+        } else {
+            Err(Status::internal("Integration has no BACnet configuration"))
+        }
+    }
+
+    async fn update_bacnet_integration(
+        &self,
+        request: Request<api::UpdateBacnetIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req_int = match &request.get_ref().integration {
+            Some(v) => v,
+            None => {
+                return Err(Status::invalid_argument("integration is missing"));
+            }
+        };
+        let app_id = Uuid::from_str(&req_int.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        let _ = application::update_integration(application::Integration {
+            application_id: app_id.into(),
+            kind: application::IntegrationKind::Bacnet,
+            configuration: application::IntegrationConfiguration::Bacnet(
+                application::BacnetConfiguration {
+                    device_id: req_int.device_id,
+                    device_name: req_int.device_name.clone(),
+                    device_address: req_int.device_address.clone(),
+                    device_port: req_int.device_port,
+                    object_name: req_int.object_name.clone(),
+                    vendor_name: req_int.vendor_name.clone(),
+                    model_name: req_int.model_name.clone(),
+                },
+            ),
+            ..Default::default()
+        })
+        .await
+        .map_err(|e| e.status())?;
+
+        let mut resp = Response::new(());
+        resp.metadata_mut().insert(
+            "x-log-application_id",
+            req_int.application_id.parse().unwrap(),
+        );
+
+        Ok(resp)
+    }
+
+    async fn delete_bacnet_integration(
+        &self,
+        request: Request<api::DeleteBacnetIntegrationRequest>,
+    ) -> Result<Response<()>, Status> {
+        let req = request.get_ref();
+        let app_id = Uuid::from_str(&req.application_id).map_err(|e| e.status())?;
+
+        self.validator
+            .validate(
+                request.extensions(),
+                validator::ValidateApplicationAccess::new(validator::Flag::Update, app_id),
+            )
+            .await?;
+
+        application::delete_integration(&app_id, application::IntegrationKind::Bacnet)
             .await
             .map_err(|e| e.status())?;
 

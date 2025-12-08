@@ -417,6 +417,74 @@ service ApplicationService {
     };
   }
 
+  // Create Modbus integration.
+  rpc CreateModbusIntegration(CreateModbusIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post : "/api/applications/{integration.application_id}/integrations/modbus"
+      body : "*"
+    };
+  }
+
+  // Get Modbus integration.
+  rpc GetModbusIntegration(GetModbusIntegrationRequest)
+      returns (GetModbusIntegrationResponse) {
+    option (google.api.http) = {
+      get : "/api/applications/{application_id}/integrations/modbus"
+    };
+  }
+
+  // Update Modbus integration.
+  rpc UpdateModbusIntegration(UpdateModbusIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put : "/api/applications/{integration.application_id}/integrations/modbus"
+      body : "*"
+    };
+  }
+
+  // Delete Modbus integration.
+  rpc DeleteModbusIntegration(DeleteModbusIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/api/applications/{application_id}/integrations/modbus"
+    };
+  }
+
+  // Create BACnet integration.
+  rpc CreateBacnetIntegration(CreateBacnetIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post : "/api/applications/{integration.application_id}/integrations/bacnet"
+      body : "*"
+    };
+  }
+
+  // Get BACnet integration.
+  rpc GetBacnetIntegration(GetBacnetIntegrationRequest)
+      returns (GetBacnetIntegrationResponse) {
+    option (google.api.http) = {
+      get : "/api/applications/{application_id}/integrations/bacnet"
+    };
+  }
+
+  // Update BACnet integration.
+  rpc UpdateBacnetIntegration(UpdateBacnetIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put : "/api/applications/{integration.application_id}/integrations/bacnet"
+      body : "*"
+    };
+  }
+
+  // Delete BACnet integration.
+  rpc DeleteBacnetIntegration(DeleteBacnetIntegrationRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/api/applications/{application_id}/integrations/bacnet"
+    };
+  }
+
   // Generates application ID specific client-certificate.
   rpc GenerateMqttIntegrationClientCertificate(
       GenerateMqttIntegrationClientCertificateRequest)
@@ -458,6 +526,8 @@ enum IntegrationKind {
   MQTT_GLOBAL = 9;
   IFTTT = 10;
   BLYNK = 11;
+  MODBUS = 12;
+  BACNET = 13;
 }
 
 message Application {
@@ -1019,6 +1089,108 @@ message UpdateBlynkIntegrationRequest {
 }
 
 message DeleteBlynkIntegrationRequest {
+  // Application ID (UUID).
+  string application_id = 1;
+}
+
+message ModbusIntegration {
+  // Application ID (UUID).
+  string application_id = 1;
+
+  // Modbus TCP server address.
+  string server_address = 2;
+
+  // Modbus TCP server port.
+  uint32 server_port = 3;
+
+  // Modbus unit ID (slave address).
+  uint32 unit_id = 4;
+
+  // Device vendor name.
+  string vendor_name = 5;
+
+  // Device product code.
+  string product_code = 6;
+
+  // Device model name.
+  string model_name = 7;
+
+  // Device version.
+  string version = 8;
+}
+
+message CreateModbusIntegrationRequest {
+  // Integration object to create.
+  ModbusIntegration integration = 1;
+}
+
+message GetModbusIntegrationRequest {
+  // Application ID (UUID).
+  string application_id = 1;
+}
+
+message GetModbusIntegrationResponse {
+  // Integration object.
+  ModbusIntegration integration = 1;
+}
+
+message UpdateModbusIntegrationRequest {
+  // Integration object to update.
+  ModbusIntegration integration = 1;
+}
+
+message DeleteModbusIntegrationRequest {
+  // Application ID (UUID).
+  string application_id = 1;
+}
+
+message BacnetIntegration {
+  // Application ID (UUID).
+  string application_id = 1;
+
+  // BACnet device instance ID.
+  uint32 device_id = 2;
+
+  // BACnet device name.
+  string device_name = 3;
+
+  // BACnet device address (IP address to bind to).
+  string device_address = 4;
+
+  // BACnet device port.
+  uint32 device_port = 5;
+
+  // BACnet object name.
+  string object_name = 6;
+
+  // Device vendor name.
+  string vendor_name = 7;
+
+  // Device model name.
+  string model_name = 8;
+}
+
+message CreateBacnetIntegrationRequest {
+  // Integration object to create.
+  BacnetIntegration integration = 1;
+}
+
+message GetBacnetIntegrationRequest {
+  // Application ID (UUID).
+  string application_id = 1;
+}
+
+message GetBacnetIntegrationResponse {
+  // Integration object.
+  BacnetIntegration integration = 1;
+}
+
+message UpdateBacnetIntegrationRequest {
+  // Integration object to update.
+  BacnetIntegration integration = 1;
+}
+
+message DeleteBacnetIntegrationRequest {
   // Application ID (UUID).
   string application_id = 1;
 }

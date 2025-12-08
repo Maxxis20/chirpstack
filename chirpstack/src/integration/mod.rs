@@ -18,6 +18,7 @@ use lrwn::EUI64;
 mod amqp;
 mod aws_sns;
 mod azure_service_bus;
+mod bacnet;
 mod blynk;
 mod gcp_pub_sub;
 mod http;
@@ -26,6 +27,7 @@ mod influxdb;
 mod kafka;
 #[cfg(test)]
 pub mod mock;
+mod modbus;
 mod mqtt;
 mod mydevices;
 mod pilot_things;
@@ -175,6 +177,12 @@ async fn for_application_id(id: Uuid) -> Result<Vec<Box<dyn Integration + Sync +
             }
             application::IntegrationConfiguration::Blynk(conf) => {
                 Box::new(blynk::Integration::new(conf))
+            }
+            application::IntegrationConfiguration::Modbus(conf) => {
+                Box::new(modbus::Integration::new(conf))
+            }
+            application::IntegrationConfiguration::Bacnet(conf) => {
+                Box::new(bacnet::Integration::new(conf))
             }
             _ => {
                 continue;

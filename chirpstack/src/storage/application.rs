@@ -85,6 +85,8 @@ pub enum IntegrationKind {
     PilotThings,
     Ifttt,
     Blynk,
+    Modbus,
+    Bacnet,
 }
 
 impl fmt::Display for IntegrationKind {
@@ -108,6 +110,8 @@ impl FromStr for IntegrationKind {
             "PilotThings" => IntegrationKind::PilotThings,
             "Ifttt" => IntegrationKind::Ifttt,
             "Blynk" => IntegrationKind::Blynk,
+            "Modbus" => IntegrationKind::Modbus,
+            "Bacnet" => IntegrationKind::Bacnet,
             _ => {
                 return Err(anyhow!("Unexpected IntegrationKind: {}", s));
             }
@@ -158,6 +162,8 @@ pub enum IntegrationConfiguration {
     PilotThings(PilotThingsConfiguration),
     Ifttt(IftttConfiguration),
     Blynk(BlynkConfiguration),
+    Modbus(ModbusConfiguration),
+    Bacnet(BacnetConfiguration),
 }
 
 #[cfg(feature = "postgres")]
@@ -267,6 +273,30 @@ pub struct IftttConfiguration {
 #[serde(default)]
 pub struct BlynkConfiguration {
     pub token: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ModbusConfiguration {
+    pub server_address: String,
+    pub server_port: u32,
+    pub unit_id: u32,
+    pub vendor_name: String,
+    pub product_code: String,
+    pub model_name: String,
+    pub version: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct BacnetConfiguration {
+    pub device_id: u32,
+    pub device_name: String,
+    pub device_address: String,
+    pub device_port: u32,
+    pub object_name: String,
+    pub vendor_name: String,
+    pub model_name: String,
 }
 
 #[derive(Clone, Queryable, Insertable, PartialEq, Eq, Debug)]
