@@ -40,6 +40,7 @@ import bacnetConfigStore, {
   BACNET_OBJECT_TYPES,
   BACNET_UNITS,
 } from "../../stores/BacnetConfigStore";
+import DeviceFieldSelector from "../../components/DeviceFieldSelector";
 
 const { Option } = Select;
 
@@ -443,9 +444,9 @@ function BacnetConfig() {
           </Row>
 
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item name="units" label="Engineering Units">
-                <Select placeholder="Select units">
+                <Select placeholder="Select units" style={{ width: "50%" }}>
                   {Object.keys(BACNET_UNITS).map(unit => (
                     <Option key={unit} value={unit}>
                       {unit}
@@ -454,20 +455,29 @@ function BacnetConfig() {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item name="device_eui" label="Device EUI">
-                <Input placeholder="0000000000000001" />
-              </Form.Item>
-            </Col>
           </Row>
 
           <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="metric_field" label="Metric Field">
-                <Input placeholder="temperature" />
+            <Col span={24}>
+              <Form.Item
+                label="LoRaWAN Device & Data Field"
+                extra="Select a device and the data field to map to this BACnet object"
+              >
+                <DeviceFieldSelector
+                  deviceEui={form.getFieldValue("device_eui")}
+                  metricField={form.getFieldValue("metric_field")}
+                  onDeviceChange={devEui => form.setFieldsValue({ device_eui: devEui })}
+                  onFieldChange={field => form.setFieldsValue({ metric_field: field })}
+                />
+              </Form.Item>
+              {/* Hidden fields to store the values */}
+              <Form.Item name="device_eui" hidden>
+                <Input />
+              </Form.Item>
+              <Form.Item name="metric_field" hidden>
+                <Input />
               </Form.Item>
             </Col>
-            <Col span={12}>{/* Empty for alignment */}</Col>
           </Row>
 
           <Form.Item name="description" label="Description">

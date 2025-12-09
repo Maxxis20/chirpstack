@@ -38,6 +38,7 @@ import modbusConfigStore, {
   ModbusServerConfig,
   ModbusStatus,
 } from "../../stores/ModbusConfigStore";
+import DeviceFieldSelector from "../../components/DeviceFieldSelector";
 
 const { Option } = Select;
 
@@ -440,14 +441,24 @@ function ModbusConfig() {
           </Row>
 
           <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="device_eui" label="Device EUI">
-                <Input placeholder="0000000000000001" />
+            <Col span={24}>
+              <Form.Item
+                label="LoRaWAN Device & Data Field"
+                extra="Select a device and the data field to map to this Modbus register"
+              >
+                <DeviceFieldSelector
+                  deviceEui={form.getFieldValue("device_eui")}
+                  metricField={form.getFieldValue("metric_field")}
+                  onDeviceChange={devEui => form.setFieldsValue({ device_eui: devEui })}
+                  onFieldChange={field => form.setFieldsValue({ metric_field: field })}
+                />
               </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="metric_field" label="Metric Field">
-                <Input placeholder="temperature" />
+              {/* Hidden fields to store the values */}
+              <Form.Item name="device_eui" hidden>
+                <Input />
+              </Form.Item>
+              <Form.Item name="metric_field" hidden>
+                <Input />
               </Form.Item>
             </Col>
           </Row>
