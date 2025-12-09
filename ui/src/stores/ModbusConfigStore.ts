@@ -49,7 +49,12 @@ export interface ModbusStatus {
   registers: ModbusMapping[];
 }
 
-const API_BASE = "/api/modbus";
+// Use port 80 (nginx) for API calls - nginx proxies to the Modbus service on port 1502
+const getApiBase = () => {
+  const host = window.location.hostname;
+  return `http://${host}/api/modbus`;
+};
+const API_BASE = getApiBase();
 
 class ModbusConfigStore extends EventEmitter {
   constructor() {

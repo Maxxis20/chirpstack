@@ -87,7 +87,12 @@ export const BACNET_UNITS: { [key: string]: number } = {
   kilowattHours: 19,
 };
 
-const API_BASE = "/api/bacnet";
+// Use port 80 (nginx) for API calls - nginx proxies to the BACnet service on port 48808
+const getApiBase = () => {
+  const host = window.location.hostname;
+  return `http://${host}/api/bacnet`;
+};
+const API_BASE = getApiBase();
 
 class BacnetConfigStore extends EventEmitter {
   constructor() {
