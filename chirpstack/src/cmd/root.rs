@@ -9,7 +9,7 @@ use crate::{adr, api, applayer::fuota, backend, downlink, integration, region, s
 
 pub async fn run() -> Result<()> {
     info!(
-        version = env!("CARGO_PKG_VERSION"),
+        version = format!("{}-{}", env!("CARGO_PKG_VERSION"), env!("BUILD_TIMESTAMP")),
         docs = "https://www.chirpstack.io/",
         "Starting ChirpStack LoRaWAN Network Server"
     );

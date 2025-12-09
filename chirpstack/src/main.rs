@@ -42,7 +42,7 @@ mod test;
 mod uplink;
 
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version = concat!(env!("CARGO_PKG_VERSION"), "-", env!("BUILD_TIMESTAMP")), about, long_about = None)]
 struct Cli {
     /// Path to configuration directory
     #[arg(short, long, value_name = "DIR")]

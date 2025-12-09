@@ -974,7 +974,7 @@ impl InternalService for Internal {
             .await?;
 
         Ok(Response::new(api::GetVersionResponse {
-            version: env!("CARGO_PKG_VERSION").to_string(),
+            version: format!("{}-{}", env!("CARGO_PKG_VERSION"), env!("BUILD_TIMESTAMP")),
         }))
     }
 }
